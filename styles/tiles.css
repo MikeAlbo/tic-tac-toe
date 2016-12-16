@@ -1,1 +1,58 @@
-// tiles css
+/* tiles */
+
+.tile {
+    height: 25vh;
+    background-color: rgba(50,200,220,.2);
+}
+
+#tile0 {
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+#tile1 {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+#tile2 {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+}
+
+#tile3 {
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+}
+
+#tile4 {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top: 1px solid black;
+}
+
+#tile5 {
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+}
+
+#tile6 {
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    
+}
+
+#tile7 {
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+}
+
+#tile8 {
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+}
