@@ -1,10 +1,20 @@
 /* tiles */
 
 .tile {
-    height: 25vh;
-    background-color: rgba(50,200,220,.2);
+    
+/*    background-color: rgba(50,200,220,.2);*/
+    border: 1px solid black;
+    display: inline-block;
 }
 
+#gameBoard {
+    line-height: 0;
+    position: relative;
+
+    
+}
+
+/*
 #tile0 {
     border-right: 1px solid black;
     border-bottom: 1px solid black;
@@ -56,3 +66,4 @@
     border-left: 1px solid black;
     border-top: 1px solid black;
 }
+*/

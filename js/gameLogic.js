@@ -7,7 +7,7 @@ $(document).ready(function(){
     //container gameView div
     var gameView = $("#gameView");
     
-    // init the startup screen
+    //function to init the start sequence upon "doc.ready"
     initStartupScreen();
     
     //function to init the screen with title and start message
@@ -41,6 +41,8 @@ $(document).ready(function(){
             titleContainer.html(''); // change to animate out
         }
         
+          // function to ask user to select player
+        
         function selectGamePeice(container){
             
             container.html('<div id="gamePeiceContainer"></div>');
@@ -56,6 +58,9 @@ $(document).ready(function(){
             
             
         } // select game peice
+        
+        
+           //function to ask user if they'd like to go first
         
         function selectTurn(container, gamePeiceContainer){
             
@@ -86,6 +91,7 @@ $(document).ready(function(){
                 
                 function initGame(){
                     clearGamePeiceScreen(container,gamePeiceContainer, turnContainer);
+                    buildGame(container);
                 }
                 
                 
@@ -95,19 +101,64 @@ $(document).ready(function(){
         
     } // start game setup
     
-    
-    
-    // function to ask user to select player
-    
-    //function to ask user if they'd like to go first
-    
-    //function to init the start sequence upon "doc.ready"
-    
     //function to build gameboard
+    
+    function buildGame(container){
+        var width = 3;
+        var viewWidth = container.width();
+        var gameBoard = gameBoardConstructor(container);
+        gameBoard.html(addTiles(width,gameBoard, tileConstructor));
+        gameBoard.css(gameBoardCssContructor(width, viewWidth));
+        $(".tile").css(tileCssConstructor(width, viewWidth));
+    }
+    
+    
+    function gameBoardConstructor(container){
+        container.html('<div id="gameBoard"></div>');
+        
+        return $("#gameBoard");
+    }
     
     //function to build tile
     
+    function tileConstructor(tileNumber){
+        
+            var tile = '<div class="tile" id="tile' + tileNumber + '"></div>';
+            return tile;
+    }
+    
     //function to add tiles to gameboard
+    
+    function addTiles(boardWidth, gameBoard, tileConstructor){
+        var tiles = '';
+        for(var i = 1; i <= boardWidth * boardWidth; i++ ) {
+                tiles += tileConstructor(i);
+        }
+        return tiles;
+    }
+    
+    //css for gameboard
+    
+    function gameBoardCssContructor(width, viewWidth){
+        
+        var w = (viewWidth / (width + 2));
+        var boardWidth = w * width ;
+        var boardCSS = {"left": w +'px', "height": boardWidth +'px', "width" : boardWidth +'px'}; 
+        return boardCSS;
+    }
+    
+    // css for tiles
+    
+    function tileCssConstructor(width, viewWidth){
+        
+        var w = (viewWidth / (width + 2));
+
+        var tileCSS = {"width" : w + "px", "height" : w + "px", "background-color" : "rgba(100,150,250,.3)"};
+        return tileCSS;
+    }
+    
+    
+    //setup event listeners
     
     //function to call gameboard setup
    
