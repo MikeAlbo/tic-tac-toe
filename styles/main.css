@@ -5,3 +5,11 @@
 body {
     padding-top: 65px;
 }
+
+#openSeqContainer {
+    background-color: transparent;
+    top: 50vh;
+    -webkit-transform: translateY(-30vh);
+    transform: translateY(-30vh);
+    position: relative
+}
