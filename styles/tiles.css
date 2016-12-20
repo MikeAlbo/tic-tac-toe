@@ -2,68 +2,77 @@
 
 .tile {
     
-/*    background-color: rgba(50,200,220,.2);*/
-    border: 1px solid black;
-    display: inline-block;
-}
-
-#gameBoard {
-    line-height: 0;
-    position: relative;
-
+    background-color: rgba(50,200,220,.2);
+/*  border: 1px solid black;*/
+/*    display: inline-block;*/
+    
     
 }
 
 /*
-#tile0 {
-    border-right: 1px solid black;
-    border-bottom: 1px solid black;
+.tile p {
+    line-height: 1.5em;
 }
+*/
+
+/*
+#gameBoard {
+    line-height: 0;
+    position: relative;
+    background-color: red;
+    
+}
+*/
+
 
 #tile1 {
-    border-bottom: 1px solid black;
-    border-left: 1px solid black;
     border-right: 1px solid black;
+    border-bottom: 1px solid black;
 }
 
 #tile2 {
     border-bottom: 1px solid black;
     border-left: 1px solid black;
+    border-right: 1px solid black;
 }
 
 #tile3 {
     border-bottom: 1px solid black;
-    border-top: 1px solid black;
-    border-right: 1px solid black;
+    border-left: 1px solid black;
 }
 
 #tile4 {
     border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+}
+
+#tile5 {
+    border-bottom: 1px solid black;
     border-left: 1px solid black;
     border-right: 1px solid black;
     border-top: 1px solid black;
 }
 
-#tile5 {
+#tile6 {
     border-bottom: 1px solid black;
     border-top: 1px solid black;
     border-left: 1px solid black;
 }
 
-#tile6 {
+#tile7 {
     border-top: 1px solid black;
     border-right: 1px solid black;
     
 }
 
-#tile7 {
+#tile8 {
     border-left: 1px solid black;
     border-top: 1px solid black;
     border-right: 1px solid black;
 }
 
-#tile8 {
+#tile9 {
     border-left: 1px solid black;
     border-top: 1px solid black;
 }
-*/

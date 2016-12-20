@@ -1,8 +1,13 @@
 $(document).ready(function(){
     
+   
+    
+    
     var player = { peice: "x" };
     
     var gameTurn = 1;
+    var gameBoard = {};
+    var userClick;
     
     //container gameView div
     var gameView = $("#gameView");
@@ -91,7 +96,7 @@ $(document).ready(function(){
                 
                 function initGame(){
                     clearGamePeiceScreen(container,gamePeiceContainer, turnContainer);
-                    buildGame(container);
+                    buildGame(container, gameView);
                 }
                 
                 
@@ -103,19 +108,22 @@ $(document).ready(function(){
     
     //function to build gameboard
     
-    function buildGame(container){
+    function buildGame(container, gameView){
+       // alert("build game");
         var width = 3;
-        var viewWidth = container.width();
-        var gameBoard = gameBoardConstructor(container);
+        var viewWidth = gameView.width();
+        var gameBoard = gameBoardConstructor(gameView);
         gameBoard.html(addTiles(width,gameBoard, tileConstructor));
         gameBoard.css(gameBoardCssContructor(width, viewWidth));
-        $(".tile").css(tileCssConstructor(width, viewWidth));
+        var gameBoardWidth = $("#gameBoard").width();
+        $(".tile").css(tileCssConstructor(width, gameBoardWidth));
+        setupEventListener();
     }
     
     
-    function gameBoardConstructor(container){
-        container.html('<div id="gameBoard"></div>');
-        
+    function gameBoardConstructor(gameView){
+        gameView.html('<div id="gameBoard" class="col-xs-6 col-xs-offset-3"></div>');
+        //alert("build board");
         return $("#gameBoard");
     }
     
@@ -123,7 +131,7 @@ $(document).ready(function(){
     
     function tileConstructor(tileNumber){
         
-            var tile = '<div class="tile" id="tile' + tileNumber + '"></div>';
+            var tile = '<div class="col-xs-4 tile text-center" id="tile' + tileNumber + '"><p class="text-center"></p></div>';
             return tile;
     }
     
@@ -142,8 +150,8 @@ $(document).ready(function(){
     function gameBoardCssContructor(width, viewWidth){
         
         var w = (viewWidth / (width + 2));
-        var boardWidth = w * width ;
-        var boardCSS = {"left": w +'px', "height": boardWidth +'px', "width" : boardWidth +'px'}; 
+        var boardWidth = w * width;
+        var boardCSS = {"height": boardWidth +'px'}; 
         return boardCSS;
     }
     
@@ -152,13 +160,51 @@ $(document).ready(function(){
     function tileCssConstructor(width, viewWidth){
         
         var w = (viewWidth / (width + 2));
+        alert(w);
 
-        var tileCSS = {"width" : w + "px", "height" : w + "px", "background-color" : "rgba(100,150,250,.3)"};
+        var tileCSS = {"height" : w + "px"};
         return tileCSS;
     }
     
     
-    //setup event listeners
+    ///////// GAME PLAY -- USER CONTROL
+    
+    
+     //setup event listeners
+        function setupEventListener(){
+            $(".tile").on("click", function(){
+            userSelection(this.id);
+        });
+        }
+    
+    // function to apply user letter to gameboard and add it to data
+        function userSelection(tileId){
+            if(gameBoard[tileId]) {
+                alert("position taken");
+            } else {
+                gameBoard[tileId]  = player.peice;
+                var t = $("#" + tileId + " p"); t.html(player.peice);
+                $("#" + tileId + " p ").css(calcTileCss(t));
+                console.log(gameBoard);
+            }
+        }
+    
+    // calculate css for gamePeice fontsize
+    function calcTileCss(tile){
+        var size = tile.width();
+        var docWidth = $(document).width();
+        var fontSize = size * 0.06;
+       
+       // alert(size);
+        var lineHeight  = docWidth > 768 ? 0.65 : 1.5;
+    
+        
+        var tileInsertCss = {"font-size" : fontSize + "em", "height" : (size - 10) + "px", "line-height" : lineHeight + "em"};
+        console.log(tileInsertCss);
+        return tileInsertCss;
+        
+    }
+     
     
     //function to call gameboard setup
    
