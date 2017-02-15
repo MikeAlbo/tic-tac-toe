@@ -3,10 +3,11 @@ $(document).ready(function(){
    
     
     
-    var player = { peice: "x" };
-    
+    var player = { peice: "x", score: 0 };
+    var ai = {peice: "o", score: 0}, drawScore = 0;
+    var playCount = 0;
     var gameTurn = 1;
-    var gameBoard = {};
+    var gameBoard = { tile1: null, tile2: null, tile3: null, tile4: null, tile5: null, tile6: null, tile7: null, tile8: null, tile9: null};
     var userClick;
     
     //container gameView div
@@ -160,7 +161,6 @@ $(document).ready(function(){
     function tileCssConstructor(width, viewWidth){
         
         var w = (viewWidth / (width + 2));
-        alert(w);
 
         var tileCSS = {"height" : w + "px"};
         return tileCSS;
@@ -206,10 +206,95 @@ $(document).ready(function(){
     }
      
     
-    //function to call gameboard setup
-   
+    // check to see if game is won
+    
+    function checkWin(state, player){
+        if(playCount > 5) {
+            if(
+            (state[1] === player && state[2] === player && state[3] === player),
+            (state[4] === player && state[5] === player && state[6] === player),
+            (state[7] === player && state[8] === player && state[9] === player),
+            (state[1] === player && state[5] === player && state[9] === player),
+            (state[3] === player && state[5] === player && state[7] === player),
+            (state[1] === player && state[4] === player && state[7] === player),
+            (state[2] === player && state[5] === player && state[8] === player),
+            (state[3] === player && state[6] === player && state[9] === player)
+        ) {
+               alert("win"); return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
     
     
+    // check to see whos turn it is
+    
+    function checkTurn(gameTurn) {
+        if(!gameTurn) {
+            ai();
+        }
+    }
+    
+    
+    // computer add peice to gameBoard
+    
+    function addAiPeice(tile, ai) {
+        var t = $("#" + tile + "p");
+        t.html(ai.peice).css(calcTileCss(t));
+    }
+    
+    
+    // run minMax
+    
+    function minMax(gameState, player) {
+        
+    }
+    
+    // win seq
+    
+    function gameWon(winner){
+        alert("winner ", winner);
+        resetGame(false);
+    }
+    
+    // draw seq
+    
+    //reset gameboard
+    
+    function resetGame(fullReset) {
+        
+        if(fullReset){
+            // reset scores
+            // run setup seq
+        }
+        
+        // clear gameboard
+        
+    }
+    
+    
+    //update score
+    
+    function updateScore(winner){
+        if(winner == player){
+            player.score++;
+            $("#yourScore").html(player.score);
+        } else if (winner == ai) {
+            ai.score++;
+            $("#computerScore").html(ai.score);
+        } else {
+            drawScore++;
+            $("#drawScore").html(drawScore);
+        }
+    }
+    
+    
+    // ai
+    
+
 }); // document ready
 
 

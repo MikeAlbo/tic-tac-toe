@@ -8,8 +8,14 @@
     <meta name="description" content="Tic Tac Toe">
     <meta name="author" content="Michael Albonetti">
     <title>Starter Template for Bootstrap 3.3.7</title>
+<!--
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+-->
+   
+   <link rel="stylesheet" href="bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+   <link rel="stylesheet" href="bootstrap/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css">
+   
     
     <!--my css-->
     <link rel="stylesheet" type="text/css" href="styles/main.css">
@@ -35,15 +41,61 @@
             </div>
         </div>
     </nav>
+    
+    
+<!--    modal -->
+    
+    <div class="modal fade" id="gameSetup" tabindex="-1" role="dialog" aria-labelledby="gameSetupModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title text-center" id="gameSetupTitle">Game setup</h4>
+      </div>
+      <div class="modal-body">
+       
+       <div class="row">
+           <div class="col-xs-12 text-center">
+           <h2 id="gameSetuph2"></h2>
+           </div>
+           <div class="col-xs-3 col-xs-offset-2 text-center gameSetupEdit">
+               <a href="#" id="gameSetupTurn"> </a>
+           </div>
+           <div class="col-xs-3 col-xs-offset-2 text-right gameSetupEdit">
+               <a href="#" id="gameSetupPiece"></a>
+           </div>
+       </div>
+    
+        
 
-    <div class="container col-xs-12" id="gameView"></div>
+        
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="editButton">Edit</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Play!</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
+<!--    game View-->
 
+    <div class="container col-xs-12 col-md-8 col-md-offset-2 text-center" id="gameView">
+    </div>
+
+<!--
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+-->
+    <script src="bootstrap/jquery-2.1.3.min.js"></script>
+    <script src="bootstrap/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
     
     <!-- game js  -->
     <script src="js/animations.js"></script>
-    <script src="js/gameLogic.js"></script>
+<!--    <script src="js/gameLogic.js"></script>-->
+    <script src="js/demoGameSetup.js"></script>
 </body>
 </html>
 
