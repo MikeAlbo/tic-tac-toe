@@ -1,300 +1,342 @@
 $(document).ready(function(){
     
-   
+// global vars    
+var gameView = $("#gameView"),player, ai, newSession = true, viewEdit = false, turn = "player";
     
+var gameSetupModal = $("#gameSetup");    
     
-    var player = { peice: "x", score: 0 };
-    var ai = {peice: "o", score: 0}, drawScore = 0;
-    var playCount = 0;
-    var gameTurn = 1;
-    var gameBoard = { tile1: null, tile2: null, tile3: null, tile4: null, tile5: null, tile6: null, tile7: null, tile8: null, tile9: null};
-    var userClick;
-    
-    //container gameView div
-    var gameView = $("#gameView");
-    
-    //function to init the start sequence upon "doc.ready"
-    initStartupScreen();
-    
-    //function to init the screen with title and start message
-    
-    function initStartupScreen(){
-        gameView.html('<div id="openSeqContainer" class="text-center jumbotron"></div>');
-        
-        var container = $("#openSeqContainer");
-        container.html('<div id="titleContainer"><div>');
-        
-        var titleContainer = $("#titleContainer");
+    player = "x";
 
-        var title = '<h1>Tic Tac Toe<br><small>you against the machine...</small></h1>';
-        var button = '<button class="btn btn-lg btn-primary" id="startGameButton">Start</button>';
-        titleContainer.html(title + button);
+    $("#play").on('click', function(){
+    gameSetupModal.modal('hide');
+    //alert("works");
+    userScore = computerScore = drawScore = "0";
+    generateBoard();   // build Out the game Board
+    if(turn == "ai"){
+        aiInitPlay();
+    }
         
-        startGameSetup(container, titleContainer);
-   
+         // displaying the payers peice on the tile
+    
+    // onclick function
+    $(".tiles").on('click', function(){
+       var id = this.id;
+        addPieceToTile(id, player);
+    });
+    
+    // add players peice to tile
+    
+    function addPieceToTile(tile, peice){
+        $("#" + tile).html('<p class="tileText">' + peice + '</p>');
+    }
+        
+    });
+    
+function aiInitPlay(x){
+    var randomNumber = Math.floor(Math.random()  * 10);
+    data[randomNumber] = x;
+    turn = "player";
+    alert(randomNumber);
+}
+
+
+//score output
+var userScore = $("#yourScore");
+var computerScore = $("#computerScore");
+var drawScore = $("#drawScore");
+    
+
+
+//gamesetup
+    
+    if(newSession){
+        gameSetupModal.modal("show");
     }
     
-    //event function to listen for "start" (make can make a general event listener with params)
+    var gameSetup2 = $("#gameSetuph2");
+    var gameSetupTurn = $("#gameSetupTurn");
+    var gameSetupPiece = $("#gameSetupPiece");
     
-    function startGameSetup(container, titleContainer){
-        $("#startGameButton").on("click", function(){
-            clearScreen(container, titleContainer);
-            selectGamePeice(container);    
-        });
-        
-        function clearScreen(container, titleContainer){  // mod to animation
-            container.html(''); // clear after animation
-            titleContainer.html(''); // change to animate out
+    function updateView(){
+        gameSetup2.html("It's " + turn + " turn, and you are &quot;" + player + "&quot;") ;
+        gameSetupTurn.html(turn == "player" ? "ai" : "player");
+        gameSetupPiece.html(player == "x" ? "o" : "x");
+    }
+    
+    updateView();
+    
+    function changeTurn(){
+        turn = turn == "player" ? "ai" : "player";
+        //alert(turn);
+    }
+    
+    function changePiece(){
+        player = player == "x" ? "o" : "x";
+    }
+    
+    var gameSetupEdit = $(".gameSetupEdit");
+    gameSetupEdit.hide();
+    
+    
+    function showEdit(){
+        if(!viewEdit){
+            gameSetupEdit.show();
+            viewEdit = true;
+        } else {
+            gameSetupEdit.hide();
+            viewEdit = false;
         }
+    }
+    
+    $("#editButton").on('click', function(){
+        showEdit();
+    });
+    
+    gameSetupPiece.on('click', function(){
+        changePiece();
+        updateView();
+    });
+    
+    gameSetupTurn.on('click', function(){
+       changeTurn(); 
+        updateView();
+    });
+    
+    
+
+var SetupSession = function(){
+  
+  
+    
+};
+
+
+//gameboard creater
+    
+    // build a single square, and to DOM
+    // function uses the for loop iter. to designate the square id
+    
+    //square 
+    
+    function tile(id){
         
-          // function to ask user to select player
+        var t = '<div class="col-xs-4 tiles" ';
+        t += 'id="tile-'+id+'" ';
+        //t += 'onclick="clickedTile("tile-'+id+'")"';
+        t += '></div>';
         
-        function selectGamePeice(container){
-            
-            container.html('<div id="gamePeiceContainer"></div>');
-            var gamePeiceContainer = $("#gamePeiceContainer");
-            var question = '<h3>Select your game peice.</h3>';
-            var button = '<div class="btn-group" role="group" aria-label="..."><button type="button" class="btn btn-default" id="selectX"> &nbsp; X &nbsp; </button><button type="button" class="btn btn-default" id="selectO">&nbsp; O &nbsp;</button></div>';
-            
-            gamePeiceContainer.html(question + button);
-            
-            $("#selectX").on("click", function(){player.peice = "x"; selectTurn(container, gamePeiceContainer);});
-            $("#selectO").on("click", function(){player.peice = "o"; selectTurn(container, gamePeiceContainer);});
-            
-            
-            
-        } // select game peice
+        return t;
         
+    }
+    
+    
+    // generate board
+    
+    function generateBoard(){
         
-           //function to ask user if they'd like to go first
+    
         
-        function selectTurn(container, gamePeiceContainer){
-            
-            clearGamePeiceScreen(container, gamePeiceContainer);
-            askForTurn(container);
-            
-            //clear gamePeiceContainer
-            function clearGamePeiceScreen(container, gamePeiceContainer, turnContainer){ // animation
-                gamePeiceContainer.html(''); // animate out
+        var board = '';
+        for(var i = 1; i < 10; i++){
+           // board += '<div class="col-xs-4 tiles" id= "tile-' + i + '"></div> ';
+            board += tile(i);
+        }   
+        
+        board += "</div>";
+        
+        gameView.html(board);
+        tileSize();
+    }
+    
+    
+    // tile size function, make the tile height equal to the tile width
+    function tileSize(){
+        // get the average width of a tile
+        var width = $("#tile-1").width();
+        $(".tiles").css("height", width);
+    }
+    
+    
+    // on window resize, adjust height of tiles
+    
+    $(window).resize(function(){
+        tileSize();
+    });
+    
+    
+    // displaying the payers peice on the tile
+    
+    // onclick function
+    $(".tiles").on('click', function(){
+        alert("clicked");
+       var id = this.id;
+        addPieceToTile(id, "X");
+    });
+    
+    // add players peice to tile
+    
+    function addPieceToTile(tile, peice){
+        $("#" + tile).html('<p class="tileText">' + peice + '</p>');
+    }
+    
+    
+    
+    
+
+// === GamePlay and AI === //    
+    
+var data = ["null",null,"null",null,"null",null,null,null,null];
+ai = new AiPlayer(data);
+ai.setSeed(player === "o" ? "x" : "o");
+//console.log(ai.move());
+function AiPlayer(data){
+    var data = data, seed, oppSeed;
+    
+    this.setSeed = function(_seed){
+        oppSeed = _seed === "x" ? "o" : "x";
+        seed = _seed;
+    };
+    
+    this.getSeed = function(){
+        return seed;
+    };
+    
+    this.move = function(){
+        return miniMax(2, seed) [1];
+    };
+    
+    function miniMax(depth, player){
+        var nextMoves = getValidMoves(depth, player);
+        
+        //console.log(nextMoves);
+        
+        var best = (player === seed) ? -100 : 100,
+            current,
+            bestIdx = -1;
+        
+        if(nextMoves.length === 0 || depth === 0){
+            best = evaluate();
+        } else {
+            for(var i = nextMoves.length;  i--;){
+                var m = nextMoves[i];
+                data[m] = player;
                 
-                container.html(''); //clear after animation
-                
-            } //clear
-            
-            //ask for turn
-            function askForTurn(container){
-                
-                container.html('<div id="turnContainer"></div>');
-                var turnContainer = $("#turnContainer");
-                
-                var title = '<h3>Who Should Start?</h3>';
-                var button = '<div class="btn-group" role="group" aria-label="..."><button type="button" class="btn btn-default" id="selectMe"> &nbsp; Me &nbsp; </button><button type="button" class="btn btn-default" id="selectComputer">&nbsp; Computer &nbsp;</button></div>';
-                
-                turnContainer.html(title + button);
-                
-                $("#selectMe").on("click", function(){gameTurn = 1; initGame();});
-                $("#selectComputer").on("click", function(){gameTurn = 0; initGame();});
-                
-                function initGame(){
-                    clearGamePeiceScreen(container,gamePeiceContainer, turnContainer);
-                    buildGame(container, gameView);
+                if(player == seed){
+                    current = miniMax(depth -1, oppSeed)[0];
+                    if(current > best){
+                        best = current;
+                        bestIdx = m;
+                    }
+                } else {
+                    current = miniMax(depth -1, seed)[0];
+                    if(current < best){
+                        best = current;
+                        bestIdx = m;
+                    }
                 }
-                
-                
-            } // ask for turn
-            
-        } // select turn
-        
-    } // start game setup
-    
-    //function to build gameboard
-    
-    function buildGame(container, gameView){
-       // alert("build game");
-        var width = 3;
-        var viewWidth = gameView.width();
-        var gameBoard = gameBoardConstructor(gameView);
-        gameBoard.html(addTiles(width,gameBoard, tileConstructor));
-        gameBoard.css(gameBoardCssContructor(width, viewWidth));
-        var gameBoardWidth = $("#gameBoard").width();
-        $(".tile").css(tileCssConstructor(width, gameBoardWidth));
-        setupEventListener();
-    }
-    
-    
-    function gameBoardConstructor(gameView){
-        gameView.html('<div id="gameBoard" class="col-xs-6 col-xs-offset-3"></div>');
-        //alert("build board");
-        return $("#gameBoard");
-    }
-    
-    //function to build tile
-    
-    function tileConstructor(tileNumber){
-        
-            var tile = '<div class="col-xs-4 tile text-center" id="tile' + tileNumber + '"><p class="text-center"></p></div>';
-            return tile;
-    }
-    
-    //function to add tiles to gameboard
-    
-    function addTiles(boardWidth, gameBoard, tileConstructor){
-        var tiles = '';
-        for(var i = 1; i <= boardWidth * boardWidth; i++ ) {
-                tiles += tileConstructor(i);
-        }
-        return tiles;
-    }
-    
-    //css for gameboard
-    
-    function gameBoardCssContructor(width, viewWidth){
-        
-        var w = (viewWidth / (width + 2));
-        var boardWidth = w * width;
-        var boardCSS = {"height": boardWidth +'px'}; 
-        return boardCSS;
-    }
-    
-    // css for tiles
-    
-    function tileCssConstructor(width, viewWidth){
-        
-        var w = (viewWidth / (width + 2));
-
-        var tileCSS = {"height" : w + "px"};
-        return tileCSS;
-    }
-    
-    
-    ///////// GAME PLAY -- USER CONTROL
-    
-    
-     //setup event listeners
-        function setupEventListener(){
-            $(".tile").on("click", function(){
-            userSelection(this.id);
-        });
-        }
-    
-    // function to apply user letter to gameboard and add it to data
-        function userSelection(tileId){
-            if(gameBoard[tileId]) {
-                alert("position taken");
-            } else {
-                gameBoard[tileId]  = player.peice;
-                var t = $("#" + tileId + " p"); t.html(player.peice);
-                $("#" + tileId + " p ").css(calcTileCss(t));
-                console.log(gameBoard);
+                data[m] = null;
             }
         }
-    
-    // calculate css for gamePeice fontsize
-    function calcTileCss(tile){
-        var size = tile.width();
-        var docWidth = $(document).width();
-        var fontSize = size * 0.06;
-       
-       // alert(size);
-        var lineHeight  = docWidth > 768 ? 0.65 : 1.5;
-    
         
-        var tileInsertCss = {"font-size" : fontSize + "em", "height" : (size - 10) + "px", "line-height" : lineHeight + "em"};
-        console.log(tileInsertCss);
-        return tileInsertCss;
         
+        return [best, bestIdx];
     }
-     
     
-    // check to see if game is won
+    function getValidMoves(depth, seed){
+        var nm = [];
+        if(hasWon(depth, seed) || hasWon(depth, oppSeed)){
+            return nm;
+        }
+        for(var i = data.length; i--;){
+            if(data[i] === null){
+                nm.push(i);
+            }
+        }
+        return nm;
+    }
     
-    function checkWin(state, player){
-        if(playCount > 5) {
-            if(
-            (state[1] === player && state[2] === player && state[3] === player),
-            (state[4] === player && state[5] === player && state[6] === player),
-            (state[7] === player && state[8] === player && state[9] === player),
-            (state[1] === player && state[5] === player && state[9] === player),
-            (state[3] === player && state[5] === player && state[7] === player),
-            (state[1] === player && state[4] === player && state[7] === player),
-            (state[2] === player && state[5] === player && state[8] === player),
-            (state[3] === player && state[6] === player && state[9] === player)
+    function evaluate(){
+        var s = 0;
+        s += evaluateLine(0,1,2);
+        s += evaluateLine(3,4,5);
+        s += evaluateLine(6,7,8);
+        s += evaluateLine(0,3,6);
+        s += evaluateLine(1,4,7);
+        s += evaluateLine(2,5,8);
+        s += evaluateLine(0,4,8);
+        s += evaluateLine(2,4,6);
+        return s;
+    }
+    
+    function evaluateLine(a,b,c){
+        var s = 0;
+        if(data[a] == seed){
+            s = 1;
+        } else if(data[a] == oppSeed){
+            s = -1;
+        }
+        
+        if(data[b] == seed){
+            if(s == 1){
+                s = 10;
+            } else if (s === -1){
+                return 0;
+            } else {
+                s = 1;
+            }
+        } else if (data[b] == oppSeed){
+            if(s == -1){
+                s = -10;
+            } else if (s === 1){
+                return 0;
+            } else {
+                s = -1;
+            }
+        }
+        
+        if(data[c] == seed){
+            if(s > 0){
+                s *= 10;
+            } else if (s < 0) {
+                return 0;
+            } else {
+                s = 1;
+            }
+        } else if (data[c] == oppSeed){
+            if(s < 0){
+                s *= 10;
+            } else if (s > 0) {
+                return 0;
+            } else {
+                s = -1;
+            }
+        }
+        
+        return s;
+    }
+    
+    
+//    var winningPatterns = (function(state, player){
+//        
+//    }) ();
+    
+    function hasWon(state, player){
+        if(
+            (state[0] === player && state[1] === player && state[2] === player) ||
+            (state[3] === player && state[4] === player && state[5] === player) ||
+            (state[6] === player && state[7] === player && state[8] === player) ||
+            (state[0] === player && state[3] === player && state[6] === player) ||
+            (state[1] === player && state[4] === player && state[7] === player) ||
+            (state[2] === player && state[5] === player && state[8] === player) ||
+            (state[0] === player && state[4] === player && state[8] === player) ||
+            (state[2] === player && state[6] === player && state[4] === player)
         ) {
-               alert("win"); return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+             return true;
+            } 
     }
+}
     
     
-    // check to see whos turn it is
-    
-    function checkTurn(gameTurn) {
-        if(!gameTurn) {
-            ai();
-        }
-    }
-    
-    
-    // computer add peice to gameBoard
-    
-    function addAiPeice(tile, ai) {
-        var t = $("#" + tile + "p");
-        t.html(ai.peice).css(calcTileCss(t));
-    }
-    
-    
-    // run minMax
-    
-    function minMax(gameState, player) {
-        
-    }
-    
-    // win seq
-    
-    function gameWon(winner){
-        alert("winner ", winner);
-        resetGame(false);
-    }
-    
-    // draw seq
-    
-    //reset gameboard
-    
-    function resetGame(fullReset) {
-        
-        if(fullReset){
-            // reset scores
-            // run setup seq
-        }
-        
-        // clear gameboard
-        
-    }
-    
-    
-    //update score
-    
-    function updateScore(winner){
-        if(winner == player){
-            player.score++;
-            $("#yourScore").html(player.score);
-        } else if (winner == ai) {
-            ai.score++;
-            $("#computerScore").html(ai.score);
-        } else {
-            drawScore++;
-            $("#drawScore").html(drawScore);
-        }
-    }
-    
-    
-    // ai
-    
-
 }); // document ready
 
 

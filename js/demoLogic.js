@@ -204,7 +204,7 @@
 //    }// ai
 
 var player, ai;
-var data = ["o",null,"x",null,"x",null,null,null,null];
+var data = ["o","o","o",null,"x",null,null,null,null];
 player = "o";
 ai = new AiPlayer(data);
 ai.setSeed(player === "o" ? "x" : "o");
