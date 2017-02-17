@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 // global vars    
-var gameView = $("#gameView"), user = "X", computer = "O", turn = "your", newSession = true, viewEdit = false;
+var gameView = $("#gameView"), user = "X", computer = "O", turn = "your", newSession = true, viewEdit = false, count = 0;
     
 
 //score output
@@ -144,8 +144,23 @@ var SetupSession = function(){
         $("#" + tile).html('<p class="tileText">' + peice + '</p>');
     }
     
+    //update the count
+    
+    function updateCount(reset){
+        if(reset){
+            count = 0;
+        }
+        count++;
+        
+        if(count == 9){
+            // checkWin("player");
+            // checkWin("ai");
+            // gameOver("tie");     
+        }
+    }
     
     
-});
+    
+});  // doc ready
 
 
