@@ -204,7 +204,7 @@
 //    }// ai
 
 var player, ai;
-var data = ["o","o","o",null,"x",null,null,null,null];
+var data = ["o",undefined,"o",undefined,"x",undefined,undefined,undefined,undefined];
 player = "o";
 ai = new AiPlayer(data);
 ai.setSeed(player === "o" ? "x" : "o");
@@ -254,7 +254,7 @@ function AiPlayer(data){
                         bestIdx = m;
                     }
                 }
-                data[m] = null;
+                data[m] = undefined;
             }
         }
         
@@ -268,7 +268,7 @@ function AiPlayer(data){
             return nm;
         }
         for(var i = data.length; i--;){
-            if(data[i] === null){
+            if(data[i] === undefined){
                 nm.push(i);
             }
         }

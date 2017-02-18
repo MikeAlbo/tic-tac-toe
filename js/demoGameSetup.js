@@ -135,8 +135,11 @@ var SetupSession = function(){
     // onclick function
     $(".tiles").on('click', function(){
        var id = this.id;
-        addPieceToTile(id, "X");
+        playerMove(id);
     });
+    
+   
+    
     
     // add players peice to tile
     
@@ -144,20 +147,7 @@ var SetupSession = function(){
         $("#" + tile).html('<p class="tileText">' + peice + '</p>');
     }
     
-    //update the count
     
-    function updateCount(reset){
-        if(reset){
-            count = 0;
-        }
-        count++;
-        
-        if(count == 9){
-            // checkWin("player");
-            // checkWin("ai");
-            // gameOver("tie");     
-        }
-    }
     
     
     

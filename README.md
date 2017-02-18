@@ -1,6 +1,12 @@
 # Tic Tac Toe
 ReadMe file
 
+## things to consider
+
+1. The game should be made into a factory function?? i.e. new Game();
+2. whena  new game is created, it should automatically reset the data and the ui
+
+
 ## js 
 
 // game logic

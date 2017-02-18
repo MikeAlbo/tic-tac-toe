@@ -1,7 +1,7 @@
 $(document).ready(function(){
     
 // global vars    
-var gameView = $("#gameView"),player, ai, newSession = true, viewEdit = false, turn = "player";
+var gameView = $("#gameView"),player, ai, newSession = true, viewEdit = false, turn = "player", count = 0;
     
 var gameSetupModal = $("#gameSetup");    
     
@@ -15,20 +15,22 @@ var gameSetupModal = $("#gameSetup");
     if(turn == "ai"){
         aiInitPlay();
     }
+        // displaying the payers peice on the tile
+    
+        // onclick function
+        $(".tiles").on('click', function(){
+           // alert("clicked");
+           var id = parseInt(this.id.match(/[1-9]/));
+            //console.log(".tiles clicked ID: " + id);
+            playerMove(id);
+            id = null;
+        });
         
-         // displaying the payers peice on the tile
-    
-    // onclick function
-    $(".tiles").on('click', function(){
-       var id = this.id;
-        addPieceToTile(id, player);
+        
+        // test the reset gameboard feature ### remove!!
+    $("#resetGameBoardButton").on('click', function(){
+        resetGameBoard();
     });
-    
-    // add players peice to tile
-    
-    function addPieceToTile(tile, peice){
-        $("#" + tile).html('<p class="tileText">' + peice + '</p>');
-    }
         
     });
     
@@ -121,8 +123,8 @@ var SetupSession = function(){
     function tile(id){
         
         var t = '<div class="col-xs-4 tiles" ';
-        t += 'id="tile-'+id+'" ';
-        //t += 'onclick="clickedTile("tile-'+id+'")"';
+        t += 'id="tile-'+ id +'"';
+        //t += 'onclick="clickedTile("'+id+'")"';
         t += '></div>';
         
         return t;
@@ -138,7 +140,7 @@ var SetupSession = function(){
         
         var board = '';
         for(var i = 1; i < 10; i++){
-           // board += '<div class="col-xs-4 tiles" id= "tile-' + i + '"></div> ';
+           // board += '<div class="col-xs-4 tiles" id= "' + i + '"></div> ';
             board += tile(i);
         }   
         
@@ -164,20 +166,66 @@ var SetupSession = function(){
     });
     
     
-    // displaying the payers peice on the tile
     
-    // onclick function
-    $(".tiles").on('click', function(){
-        alert("clicked");
-       var id = this.id;
-        addPieceToTile(id, "X");
-    });
+    
+    
+     // handle player making a move
+    
+    function playerMove(tile){
+        if(turn == "player"){
+            if(data[tile - 1 ]){
+            // alert the user that the tile is taken
+                //alert("space taken"); // remove
+            } else{
+                data[tile - 1 ] = player;
+                console.log(data);
+                addPieceToTile(tile, player);
+                updateCount();
+                console.log(count);
+                //play the added tile success animation
+//                if(hasWon(user)){
+//                    return gameOver("player");
+//                } else {
+//                    turn = "ai";
+//                    // call the ai function
+//                }
+            }
+        } else {
+            // alert the user that it's not their turn
+        }
+    } // playerMove
     
     // add players peice to tile
     
     function addPieceToTile(tile, peice){
-        $("#" + tile).html('<p class="tileText">' + peice + '</p>');
+        $("#tile-" + tile).html('<p class="tileText">' + peice + '</p>');
     }
+    
+    //update the count
+    
+    function updateCount(reset){
+        if(reset){
+            count = 0;
+        }
+        count++;
+        
+        if(count == 9){
+            // checkWin("player");
+            // checkWin("ai");
+            // gameOver("tie");     
+        }
+    }
+    
+    
+    // resetting the gameboard both ui and data
+    function resetGameBoard(){
+        alert("resetting");
+        for(var i = 1; i < 10; i++ ){
+            $("#tile-" + i).html("");
+        }
+    }
+    
+    
     
     
     
@@ -185,7 +233,7 @@ var SetupSession = function(){
 
 // === GamePlay and AI === //    
     
-var data = ["null",null,"null",null,"null",null,null,null,null];
+var data = [undefined,undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined];
 ai = new AiPlayer(data);
 ai.setSeed(player === "o" ? "x" : "o");
 //console.log(ai.move());
@@ -234,7 +282,7 @@ function AiPlayer(data){
                         bestIdx = m;
                     }
                 }
-                data[m] = null;
+                data[m] = undefined;
             }
         }
         
@@ -248,7 +296,7 @@ function AiPlayer(data){
             return nm;
         }
         for(var i = data.length; i--;){
-            if(data[i] === null){
+            if(data[i] === undefined){
                 nm.push(i);
             }
         }
@@ -335,6 +383,8 @@ function AiPlayer(data){
             } 
     }
 }
+    
+    
     
     
 }); // document ready
