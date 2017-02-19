@@ -182,6 +182,8 @@ var SetupSession = function(){
                 addPieceToTile(tile, player);
                 updateCount();
                 console.log(count);
+                changeTurn();
+                aiMove();
                 //play the added tile success animation
 //                if(hasWon(user)){
 //                    return gameOver("player");
@@ -192,6 +194,7 @@ var SetupSession = function(){
             }
         } else {
             // alert the user that it's not their turn
+            console.log("not turn");
         }
     } // playerMove
     
@@ -223,6 +226,20 @@ var SetupSession = function(){
         for(var i = 1; i < 10; i++ ){
             $("#tile-" + i).html("");
         }
+    }
+    
+    
+    // handle the ai movement 
+    
+    function aiMove(){
+        var move = ai.move();
+        addPieceToTile(move + 1, player == "x" ? "o" : "x");
+        // ai move animation
+        data[move] = player == "x" ? "o" : "x";
+        // game won ? 
+        console.log(data);
+        updateCount();
+        changeTurn();
     }
     
     
