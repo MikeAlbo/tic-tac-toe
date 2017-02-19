@@ -43,7 +43,7 @@
     </nav>
     
     
-<!--    modal -->
+<!--   game setup modal -->
     
     <div class="modal fade" id="gameSetup" tabindex="-1" role="dialog" aria-labelledby="gameSetupModal">
   <div class="modal-dialog" role="document">
@@ -65,16 +65,34 @@
                <a href="#" id="gameSetupPiece"></a>
            </div>
        </div>
-    
-        
-
-        
-        
+   
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" id="editButton">Edit</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="play">Play!</button>
+      </div>
+    </div>
+  </div>
+</div>
+   
+   <!--   game over modal -->
+    
+    <div class="modal fade" id="gameOver" tabindex="-1" role="dialog" aria-labelledby="gameOverModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title text-center" id="gameOverModal">Game Over</h4>
+      </div>
+      <div class="modal-body">
+       
+       <h2 id="gameOverMessage"></h2>
+   
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="newSessionButton" data-dismiss="modal">New Session</button>
+        <button type="button" class="btn btn-primary" id="rematchButton" data-dismiss="modal">Rematch!</button>
       </div>
     </div>
   </div>

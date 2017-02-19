@@ -104,6 +104,45 @@ var drawScore = $("#drawScore");
         updateView();
     });
     
+// handle the game over functionality 
+
+var gameOverModal = $("#gameOverModal");
+var gameOverMessage = $("#gameOverMessage");
+    
+    
+function gameOver(winner){
+    if(winner == "tie"){
+       // if tie score is > 0 {}
+        // else
+        gameOverMessage.html("There seems to be a tie");
+        // play tie game function
+    } else if(winner == "ai") {
+        gameOverMessage.html("I think, I think the computer won.");
+        // ai won animation
+    } else {
+        gameOverMessage.html("There must have been an error, I looks like you won.");
+        // player won function
+    }
+    
+    gameOverModal.modal("toggle");
+}
+    
+// create a new session
+    $("#newSessionButton").on('click', function(){
+        // alert the user to a new session
+        // reset the session
+    });
+    
+// rematch button (create a new game)
+    $("#rematchButton").on('click', function(){
+       gameOverMessage.html("let's get this party started...");
+        setTimeout(function(){
+            gameOverModal.modal("hide");
+            // reset game
+        }, 1000);
+    });
+    
+    
     
 
 var SetupSession = function(){
@@ -182,15 +221,15 @@ var SetupSession = function(){
                 addPieceToTile(tile, player);
                 updateCount();
                 console.log(count);
-                changeTurn();
-                aiMove();
+                //changeTurn();
+                //aiMove();
                 //play the added tile success animation
-//                if(hasWon(user)){
-//                    return gameOver("player");
-//                } else {
-//                    turn = "ai";
-//                    // call the ai function
-//                }
+                if(hasWon(data, player)){
+                    return gameOver("player");
+                } else {
+                    changeTurn();
+                    aiMove();
+                }
             }
         } else {
             // alert the user that it's not their turn
@@ -233,10 +272,13 @@ var SetupSession = function(){
     
     function aiMove(){
         var move = ai.move();
-        addPieceToTile(move + 1, player == "x" ? "o" : "x");
+        var aiPiece = player == "x" ? "o" : "x" 
+        addPieceToTile(move + 1, aiPiece );
         // ai move animation
-        data[move] = player == "x" ? "o" : "x";
-        // game won ? 
+        data[move] = aiPiece;
+        if(hasWon(data, aiPiece)){
+            return gameOver("ai");
+        }
         console.log(data);
         updateCount();
         changeTurn();
@@ -379,12 +421,10 @@ function AiPlayer(data){
         
         return s;
     }
+
+}
     
-    
-//    var winningPatterns = (function(state, player){
-//        
-//    }) ();
-    
+    // check to see if there's been a winner
     function hasWon(state, player){
         if(
             (state[0] === player && state[1] === player && state[2] === player) ||
@@ -399,7 +439,6 @@ function AiPlayer(data){
              return true;
             } 
     }
-}
     
     
     
