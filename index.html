@@ -43,57 +43,21 @@
     </nav>
     
     
-<!--   game setup modal -->
+<!--  modal -->
     
-    <div class="modal fade" id="gameSetup" tabindex="-1" role="dialog" aria-labelledby="gameSetupModal">
+    <div class="modal fade" id="gameModal" tabindex="-1" role="dialog" aria-labelledby="gameModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title text-center" id="gameSetupTitle">Game setup</h4>
+        <h4 class="modal-title text-center" id="gameModalTitle"></h4>
       </div>
       <div class="modal-body">
        
-       <div class="row">
-           <div class="col-xs-12 text-center">
-           <h2 id="gameSetuph2"></h2>
-           </div>
-           <div class="col-xs-3 col-xs-offset-2 text-center gameSetupEdit">
-               <a href="#" id="gameSetupTurn"> </a>
-           </div>
-           <div class="col-xs-3 col-xs-offset-2 text-right gameSetupEdit">
-               <a href="#" id="gameSetupPiece"></a>
-           </div>
-       </div>
-   
+       <div class="row" id="gameModalContent"></div>
+      
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" id="editButton">Edit</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="play">Play!</button>
-      </div>
-    </div>
-  </div>
-</div>
-   
-   <!--   game over modal -->
-    
-    <div class="modal fade" id="gameOver" tabindex="-1" role="dialog" aria-labelledby="gameOverModal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title text-center" id="gameOverModal">Game Over</h4>
-      </div>
-      <div class="modal-body">
-       
-       <h2 id="gameOverMessage"></h2>
-   
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" id="newSessionButton" data-dismiss="modal">New Session</button>
-        <button type="button" class="btn btn-primary" id="rematchButton" data-dismiss="modal">Rematch!</button>
-      </div>
+      <div class="modal-footer" id="gameModalFooter"></div>
     </div>
   </div>
 </div>

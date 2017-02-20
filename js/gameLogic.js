@@ -3,42 +3,140 @@ $(document).ready(function(){
 // global vars    
 var gameView = $("#gameView"),player, ai, newSession = true, viewEdit = false, turn = "player", count = 0;
     
-var gameSetupModal = $("#gameSetup");    
+   
     
     player = "x";
-
-    $("#play").on('click', function(){
-    gameSetupModal.modal('hide');
-    //alert("works");
-    userScore = computerScore = drawScore = "0";
-    generateBoard();   // build Out the game Board
-    if(turn == "ai"){
-        aiInitPlay();
-    }
-        // displaying the payers peice on the tile
     
-        // onclick function
-        $(".tiles").on('click', function(){
-           // alert("clicked");
-           var id = parseInt(this.id.match(/[1-9]/));
-            //console.log(".tiles clicked ID: " + id);
-            playerMove(id);
-            id = null;
+    
+    
+// === handle the modals === \\
+    
+var gameModal = $("#gameModal"), 
+    gameModalTitle = $("#gameModalTitle"),
+    gameModalFooter = $("#gameModalFooter"),
+    gameModalContent = $("#gameModalContent");
+    
+// game Setup  
+    
+    function setupSessionModal(){
+        gameModalTitle.html("Tic-Tac-Toe");
+        gameModalFooter.html('<button type="button" class="btn btn-default" data-dismiss="modal">Close</button><button type="button" class="btn btn-primary" id="play">Play!</button>');
+        gameModalContent.html('<div class="col-xs-12 text-center"><h2>You are <span id="setupUser"></span><br> <small><a href="#" id="setupSmall"></a></small></h2> </div>');
+        
+        //
+        
+        var setupUser = $("#setupUser"),
+            setupSmall = $("#setupSmall"),
+            setupSmallPeice = $("#setupSmallPeice");
+        
+        function changeUser(){
+            if(player == 'x') {
+                setupUser.html("'x', and it's your turn.");
+                setupSmall.html("Rahter go second?");
+            } else {
+                setupUser.html("'o', and you will go second.");
+                setupSmall.html("Rather go first?");
+            }
+        }
+        
+        changeUser();
+        
+        setupSmall.on("click", function(){
+            player = player == 'x' ? 'o' : 'x';
+            changeUser();
+            changeTurn();
+        });
+     
+        //
+        
+        
+        $("#editButton").on("click", function(){
+            
         });
         
+        $("#play").on('click', function(){
+        gameModal.modal('hide');
+        //alert("works");
+        userScore = computerScore = drawScore = "0";
+        generateBoard();   // build Out the game Board
+        if(turn == "ai"){
+    
+            aiInitPlay(player == 'x' ? 'o' : 'x');
+        }
+            // displaying the payers peice on the tile
+            initGame();  
+    }); // play
         
-        // test the reset gameboard feature ### remove!!
+        gameModal.modal('toggle');
+    } //setupSessionModal
+    
+    
+    // handle the game over functionality 
+    
+function gameOver(winner){
+        gameModalTitle.html("Game Over");
+    if(winner == "tie"){
+       // if tie score is > 0 {}
+        // else
+        gameModalContent.html('<h2 class="text-center">There seems to be a tie</h2>');
+        // play tie game function
+    } else if(winner == "ai") {
+        gameModalContent.html('<h2 class="text-center">I think, I think the computer won.</h2>');
+        // ai won animation
+    } else {
+        gameModalContent.html('<h2 class="text-center">There must have been an error, I looks like you won.</h2>');
+        // player won function
+    }
+    
+    gameModalFooter.html('<button type="button" class="btn btn-danger" id="newSessionButton" data-dismiss="modal">New Session</button><button type="button" class="btn btn-primary" id="rematchButton">Rematch!</button>');
+    
+    // create a new session
+    $("#newSessionButton").on('click', function(){
+        // alert the user to a new session
+        // reset the session
+    });
+    
+// rematch button (create a new game)
+    $("#rematchButton").on('click', function(){
+       gameModalContent.html("<h2 class='text-center'>let's get this party started...</h2>");
+        setTimeout(function(){
+            gameModal.modal("toggle");
+            // reset game
+        }, 2000);
+    });
+    
+    
+    gameModal.modal("toggle");
+} //game over
+    
+
+    // init game
+    
+    function initGame(){
+        // onclick function
+            $(".tiles").on('click', function(){
+               var id = parseInt(this.id.match(/[1-9]/));
+                //console.log(".tiles clicked ID: " + id);
+                playerMove(id);
+                id = null;
+        }); // tiles
+    } // init game
+    
+    // test the reset gameboard feature ### remove!!
     $("#resetGameBoardButton").on('click', function(){
         resetGameBoard();
     });
-        
-    });
+    
+    setupSessionModal();
+
+
     
 function aiInitPlay(x){
     var randomNumber = Math.floor(Math.random()  * 10);
     data[randomNumber] = x;
+    addPieceToTile(randomNumber + 1, x);
     turn = "player";
-    alert(randomNumber);
+    //alert(randomNumber);
 }
 
 
@@ -52,20 +150,8 @@ var drawScore = $("#drawScore");
 //gamesetup
     
     if(newSession){
-        gameSetupModal.modal("show");
+        gameModal.modal("show");
     }
-    
-    var gameSetup2 = $("#gameSetuph2");
-    var gameSetupTurn = $("#gameSetupTurn");
-    var gameSetupPiece = $("#gameSetupPiece");
-    
-    function updateView(){
-        gameSetup2.html("It's " + turn + " turn, and you are &quot;" + player + "&quot;") ;
-        gameSetupTurn.html(turn == "player" ? "ai" : "player");
-        gameSetupPiece.html(player == "x" ? "o" : "x");
-    }
-    
-    updateView();
     
     function changeTurn(){
         turn = turn == "player" ? "ai" : "player";
@@ -76,71 +162,9 @@ var drawScore = $("#drawScore");
         player = player == "x" ? "o" : "x";
     }
     
-    var gameSetupEdit = $(".gameSetupEdit");
-    gameSetupEdit.hide();
     
     
-    function showEdit(){
-        if(!viewEdit){
-            gameSetupEdit.show();
-            viewEdit = true;
-        } else {
-            gameSetupEdit.hide();
-            viewEdit = false;
-        }
-    }
-    
-    $("#editButton").on('click', function(){
-        showEdit();
-    });
-    
-    gameSetupPiece.on('click', function(){
-        changePiece();
-        updateView();
-    });
-    
-    gameSetupTurn.on('click', function(){
-       changeTurn(); 
-        updateView();
-    });
-    
-// handle the game over functionality 
 
-var gameOverModal = $("#gameOverModal");
-var gameOverMessage = $("#gameOverMessage");
-    
-    
-function gameOver(winner){
-    if(winner == "tie"){
-       // if tie score is > 0 {}
-        // else
-        gameOverMessage.html("There seems to be a tie");
-        // play tie game function
-    } else if(winner == "ai") {
-        gameOverMessage.html("I think, I think the computer won.");
-        // ai won animation
-    } else {
-        gameOverMessage.html("There must have been an error, I looks like you won.");
-        // player won function
-    }
-    
-    gameOverModal.modal("toggle");
-}
-    
-// create a new session
-    $("#newSessionButton").on('click', function(){
-        // alert the user to a new session
-        // reset the session
-    });
-    
-// rematch button (create a new game)
-    $("#rematchButton").on('click', function(){
-       gameOverMessage.html("let's get this party started...");
-        setTimeout(function(){
-            gameOverModal.modal("hide");
-            // reset game
-        }, 1000);
-    });
     
     
     
