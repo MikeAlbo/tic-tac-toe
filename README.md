@@ -7,77 +7,119 @@ ReadMe file
 2. whena  new game is created, it should automatically reset the data and the ui
 
 
-## js 
+## gameLogic
 
-// game logic
+### global vars
+1. globalPlayer
+    a. stores the player's piece throughout the session
+    b. can be updated game by game by the player
+2. globalTurn
+    a. stores starting turn of the game throughout the session
+    b. can be updated game by game by the player
+3. newGame
+    a. stores the current game being played
+    b. is init empty until the first game is created
+    c. is re initalized for each new game
+    
 
-// initalize the game state
-// minimax
-// update html score
-// take user input
-//alert popup from bottom winner or looser // ai smack talking maybe too
-// in code, user will be 1 computer will be 0 (true, false)
+### jQuery selections
+1. gameView == #gameView
+    a. the main view of the game
+    
+### GameBuilder
+    The main constructor for the game
+    
+#### Local vars
+1. data
+    a. initally an empty array
+    b. where the game pieces are stored
+2. turn
+    a. stores the current turn
+        i. 'player' or 'ai'
+3. seed
+    a. stores the players current piece
+        i. 'x' or 'o'
+4. oppSeed
+    a. stores the ai piece
+5. count
+    a. init to 0
+    b. tracks play count
+    
+#### tileModel
+a private function that generates the tile div and assigns the id
 
-//game play
-// user selects player
-// user decides who goes first (if !score)
-// user turn --
-// user clicks on tile, onclick calls function to add user's marker to tile
-// function checks that tile is MT, adds the players marker (1), calls win function
-// win function, if totalCount > 5, checks to see if there is a winning row -- takes in the current player
-/* 
-        if(totalCount > 5){
-            if(
-                (board[0] == player && board[1] == player && board[2] == player)
-                ...
-            )
-        }
-*/
-// if win, call endGame function
-// function endGame, updates score, modifies tile css
+#### tileSize
+A public function that captures the width of #tile-1. The function takes that dimension and applies it to the .tiles class, making the tiles square. 
 
-// if noWin, totalCount++, if totalCount == 9, call draw, modify css, else ( if user turn, wait for input, else call AI )
+#### generateBoard
+A public function that creates an empty string then += a new tileModel, passing it the index for the tile's id.
 
-// AI 
-// basicly, captures the current gameboard and runs a recursive function to test the number of moves until completion 
+#### setSeed
+A public function that takes an optional argument. If argument, set the seed to that argument. Else, set seed to globalPlayer or 'x'.
 
-// AI takes in the current state of the game board
+#### getSeed
+A public function that returns the seed.
 
-/* 
-        x,o, ,
-        o,x,x,
-        x, , 
-*/
+#### setOppSeed
+A public function that sets the oppSeed var.
 
-// ... and checks the availabe spaces for the optimal decision
+#### getOppSeed
+A public function that returns the oppSeed var.
 
-/*
-    recursion( currentState, player) {
-        var currentState = currentState;
-        var levelCount = 0;
-        
-        function checkLevel(state) {
-            var thisLevelCount = 0;
-            for(var i = 0; i < 9; i++ ){
-                if (!state[i]) {
-                    state[i] = player;
-                    if(DidWin(state) && thisLevelCount < 9){
-                        return state;
-                    } else {
-                        thisLevelCount++;
-                        checkLevel(state);
-                    }
-                    
-                }
-            }
-            
-            if // count is less than 9 return winner
-            if count  == 9, no winner return draw
-            if this levelcount  > thisLevelCount return levelCount == thisLevelCount
-            
-        }
-        
-    }
-*/
+#### setTurn
+A public function that takes an optional argument. If argument, set the turn var to the argument, else 'player'.
 
-//user can clear the total scores
+#### changeTurn
+A public function that updates to turn var depending on the current  value. 
+
+#### getTurn
+A public function that returns the turn var.
+
+#### getData
+A public function that returns the data var.
+
+#### clearData
+A pub function that resets the data var back to an empty array.
+
+#### updateData
+A public var that takes 2 arguments, index and value. The function applies the value to the data var at the index provided.
+
+#### updateCount
+A private function that takes the optional argument, reset. If reset, than resets the count to 0. Else, updates the count. If the count reaches 9, calls checkWin on "player", "ai", and "tie".
+
+#### updateGameBoard
+A private function that takes 2 args, tile, piece. Using jQuery, the function applies the piece to the tile via the tile's id. 
+
+#### clearGameboard
+A private function that resets the game board via a for loop, clearing the jQuery .html value.
+
+#### playerMove
+
+#### aiMove
+
+#### aiInitPlay
+
+#### gameOver
+
+#### tie
+
+#### playerWin
+
+#### aiWin
+
+### Modals for game
+
+#### jQuery selectors
+1. gameModal
+2. gameModalTitle
+3. gameModalFooter
+4. gameModalContent
+
+#### GameModalBuilder
+...
+
+##### jQuery Selectors
+
+##### changeUser
+
+

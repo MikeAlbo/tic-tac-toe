@@ -308,10 +308,7 @@ var SetupSession = function(){
         changeTurn();
     }
     
-    
-    
-    
-    
+
     
 
 // === GamePlay and AI === //    
