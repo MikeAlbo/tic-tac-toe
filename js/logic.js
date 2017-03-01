@@ -1,7 +1,7 @@
 $(document).ready(function(){
-
-// global vars
-var globalPlayer,
+    
+    // global vars 
+    var globalPlayer,
     gloabalTurn,
     newSession = true,
     newGame,
@@ -11,10 +11,16 @@ var globalPlayer,
     drawScoreView = $("#drawScore"),
     playerScore = 0,
     aiScore = 0,
-    drawScore = 0;
+    drawScore = 0,
+    ai;
 
-var GameBuilder = function(){ 
-    var data = [],
+    
+    // ======================================================
+    
+    // game constructor
+    
+    var GameBuilder = function(){ 
+    var data = [undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined],
         turn, 
         seed,
         oppSeed,
@@ -75,8 +81,8 @@ var GameBuilder = function(){
     };
     
     // change turn
-    function changeTurn(){
-        console.log("change turn");
+    this.changeTurn = function(){
+       // console.log("change turn");
         turn = turn == 'player' ? 'ai' : 'player'; 
     };
     
@@ -94,7 +100,7 @@ var GameBuilder = function(){
 
 // clear data
     this.clearData = function(){
-    data = [];
+    data = [undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined];
 };
 
 // update data
@@ -103,77 +109,26 @@ var GameBuilder = function(){
     };
     
 // update count 
-    function updateCount(reset){
+    this.updateCount = function(reset){
             if(reset){
                return count = 0;
             }
             count++;
 
             if(count == 9){
-                // checkWin("player");
-                // checkWin("ai");
                  gameOver("tie");     
             }
         }    
     
-//update gameboard
-function addPieceToTile(tile, peice){
-        $("#tile-" + tile).html('<p class="tileText">' + peice + '</p>');
-    }
-    
-//clear gameboard
-function resetGameBoard(){
-        for(var i = 1; i < 10; i++ ){
-            $("#tile-" + i).html("");
-        }
-    }
-    
-// player move handler
-    
-     function playerMove(tile){
-        if(turn == "player"){
-            if(data[tile - 1 ]){
-            // alert the user that the tile is taken
-            } else{
-                data[tile - 1 ] = seed;
-                console.log(data);
-                addPieceToTile(tile, seed);
-                updateCount();
-                //play the added tile success animation
-                if(hasWon(data, seed)){
-                    return gameOver("player");
-                } else {
-                    console.log("player moved");
-                    changeTurn();
-                    aiMove();
-                }
-            }
-        } else {
-            // alert the user that it's not their turn
-            console.log("not turn");
-        }
-    }; // playerMove
-    
-// ai move handler 
-    function aiMove(){
-        var move = ai.move();
-        var aiPiece = oppSeed; 
-        addPieceToTile(move + 1, aiPiece );
-        // ai move animation
-        data[move] = aiPiece;
-        if(hasWon(data, aiPiece)){
-            return gameOver("ai");
-        }
-        updateCount();
-        changeTurn();
-    }
-    
+ 
 // ai init play
     this.aiInitPlay = function(x){
         var randomNumber = Math.floor(Math.random()  * 10);
         data[randomNumber] = x;
         addPieceToTile(randomNumber + 1, x);
         turn = "player";
+        count = 1;
+        
     };
     
         // init the .tiles listener
@@ -185,49 +140,9 @@ function resetGameBoard(){
         });
     }
     
+    } // gameBuilder
+// ai constructor ====================================
 
-    
-    
-// game over functions
-    
-// gameOver
-    
-    function gameOver(winner){
-        // if/ else for winner calls "tie", "player win", or ai win"
-        
-        switch(winner){
-            case "tie" : tie(); break;
-            case "ai" : aiWin(); break;
-            case "player" : playerWin(); break;
-            default : tie();     
-                
-        }
-        
-    } // game over
-    
-// tie 
-    function tie(){
-        updateScore("tie")
-        return new GameModalBuilder("gameOver", "tie");
-    } // tie
-    
-// player win
-    function playerWin(){
-        updateScore("player")
-        return new GameModalBuilder("gameOver", "player");
-    } // player win
-    
-// ai win    
-    function aiWin(){
-        updateScore("ai")
-        return new GameModalBuilder("gameOver", "ai");
-    } // ai win
-    
-    
-    // ai \\
-
-    ai = new AiPlayer(data);
-ai.setSeed(seed === "o" ? "x" : "o");
 //console.log(ai.move());
 function AiPlayer(data){
     var data = data, seed, oppSeed;
@@ -240,6 +155,10 @@ function AiPlayer(data){
     this.getSeed = function(){
         return seed;
     };
+    
+    this.getOppSeed = function(){
+        return oppSeed;
+    }
     
     this.move = function(){
         return miniMax(2, seed) [1];
@@ -373,70 +292,13 @@ function AiPlayer(data){
             } 
     }
     
-    
-}; // game builder
-
-// == reset the session === \\
-
-function resetSession(){
-    // alert the user to confirm reset
-    // if reset than clear the modal, reset the game and the scores
-    var resetConfirm = confirm("Do you want to Start Over?");
-    if(resetConfirm){
-        updateScore("reset");
-        resetGame();
-        gameModal.modal('toggle');
-    }
-    
-    newSession = true;
-    // else, return to the modal
-}
-
-// ====== new game ===== \\
-
-
-// rest the game
-function resetGame(seed, turn){
-    newGame = new GameBuilder();
-    gameView.html(newGame.generateBoard());
-    tileSize();
-    newGame.initTiles();
-    newGame.setSeed(seed);
-    newGame.setOppSeed();
-    newGame.setTurn(turn);
-    
-    // check to see if ai starts
-    if(gloabalTurn == "ai"){
-        newGame.aiInitPlay(globalPlayer == 'x' ? 'o' : 'x');
-        }
-    
-}
-    
-
-    
- // get tile size
-    function tileSize(){
-        // get the average width of a tile
-        var width = $("#tile-1").width();
-        $(".tiles").css("height", width);
-    }; // get tile size
-
-//auto resize of the tiles
-$(window).resize(function(){
-        if(newGame){
-            tileSize();
-        }
-    });
-
-
-
-// ======= Modals for game ======= \\
-var gameModal = $("#gameModal"), 
+// modal constructor ====================================    
+    // modal vars
+    var gameModal = $("#gameModal"), 
     gameModalTitle = $("#gameModalTitle"),
     gameModalFooter = $("#gameModalFooter"),
     gameModalContent = $("#gameModalContent");
-
-// game Setup  
+ 
     
     var GameModalBuilder = function(type, winner){
         
@@ -465,6 +327,7 @@ var gameModal = $("#gameModal"),
             
             function updateTurn(){
                 turn = turn == "player" ? "ai" : "player";
+               // aiGlobal.turn = aiGlobal.turn == false ? true : false;
             }
             
             // init setupUser and SetupSmall
@@ -479,25 +342,27 @@ var gameModal = $("#gameModal"),
            
             // play button
             $("#play").on('click', function(){
-                gameModal.modal('hide');
+                //gameModal.modal('hide');
                 newSession = false;
-                resetGame(player, turn); 
+                initGame(player, turn); 
+                gameModal.modal('toggle');
             }); // play
         
-        gameModal.modal('toggle');
+        
     }  else if(type == "gameOver") {
         gameModalTitle.html("Tic-Tac-Toe");
         gameModalFooter.html('<button type="button" class="btn btn-danger" id="newSessionButton">Rest Session</button><button type="button" class="btn btn-primary" id="newGameButton">New Game</button>');
         
         var message;
+        console.log("modal winner var: " + winner);
         if(winner == "tie"){
             message = "Well it apears we have matched wit!"
             if(drawScore > 1){
-                message+= "We've tied " + drawScore + " times.";
+                message+= " We've tied " + drawScore + " times.";
             } else if (drawScore > 0) {
-                message+= "We've tied " + drawScore + " time.";
+                message+= " We've tied " + drawScore + " time. ";
             } else {
-                message += "Our first tie.";
+                message += " Our first tie.";
             }
         } else if (winner == "player"){
             message = "Well it looks like you won, I want a rematch.";
@@ -520,15 +385,169 @@ var gameModal = $("#gameModal"),
         
         // new game
         $("#newGameButton").on('click', function(){
-            resetGame();
+            initGame(newGame.getSeed(), newGame.getTurn());
+            gameModal.modal('toggle');
         });
         
-        gameModal.modal('toggle');
+        //gameModal.modal('toggle');
     } 
  
     }; // gameModalBuilder
+    
+    // ======================================================
+    
+    // game play
+    
+    // init the game (reset)
+        function initGame(player, turn){
+            newGame = new GameBuilder();
+            gameView.html(newGame.generateBoard());
+            newGame.setSeed(player);
+            tileSize();
+            newGame.setOppSeed();
+            newGame.setTurn(turn);
+            newGame.initTiles();
+            ai = new AiPlayer(newGame.getData());
+            ai.setSeed(newGame.getSeed());
+            
+            if( newGame.getTurn() == "ai"){
+                newGame.aiInitPlay(newGame.getOppSeed());
 
-// update score
+            }
+        }
+    
+    //update gameboard
+    function addPieceToTile(tile, peice){
+        $("#tile-" + tile).html('<p class="tileText">' + peice + '</p>');
+    }
+    
+    //clear gameboard
+    function resetGameBoard(){
+            for(var i = 1; i < 10; i++ ){
+                $("#tile-" + i).html("");
+            }
+        }
+  
+    
+    // reset the session
+    
+    function resetSession(){
+    var resetConfirm = confirm("Do you want to Start Over?");
+    if(resetConfirm){
+        resetGameBoard();
+        updateScore("reset");
+        aiGlobal.turn = false;
+        gameModal.modal('toggle');
+        setTimeout(function(){
+             setupModal();
+        }, 500);
+        
+    }
+    
+    newSession = true;
+    // else, return to the modal
+}
+    
+    // launch setup modal
+    function setupModal(){
+        var modal = new GameModalBuilder("setup");
+        gameModal.modal('toggle');
+    }
+    // launch gamr over modal
+    
+    function gameOverModal(winner){
+        var modal = new GameModalBuilder("gameOver", winner);
+        gameModal.modal('toggle');
+    }
+    
+    // player makes a move
+    
+         function playerMove(tile){
+        if(newGame.getTurn() == "player"){
+            data = newGame.getData();
+            var seed = newGame.getSeed();
+            if(data[tile - 1 ]){
+            // alert the user that the tile is taken
+            } else{
+                //data[tile - 1 ] = seed;
+                newGame.updateData(tile - 1, seed);
+                data = newGame.getData();
+               // console.log(data);
+                addPieceToTile(tile, seed);
+                newGame.updateCount();
+                //play the added tile success animation
+                if(hasWon(data, seed)){
+                    return gameOver("player");
+                } else {
+                    //console.log("player moved");
+                    newGame.changeTurn();
+                    aiMove();
+                }
+            }
+        } else {
+            // alert the user that it's not their turn
+            console.log("not turn");
+        }
+    }; // playerMove
+    
+    // ai makes a move
+    
+    function aiMove(){
+        var move = ai.move();
+        var aiPiece = newGame.getOppSeed();
+        
+        var timeOutdelay = Math.floor(Math.random() * 750); 
+        
+        setTimeout(function(){
+            addPieceToTile(move + 1, aiPiece );
+            // ai move animation
+        newGame.updateData(move, aiPiece);
+        if(hasWon(newGame.getData(), aiPiece)){
+            return gameOver("ai");
+        }
+        newGame.updateCount();
+        newGame.changeTurn();
+        }, timeOutdelay);
+        
+        
+    }
+        
+        
+// gameOver
+    
+    function gameOver(winner){
+        // if/ else for winner calls "tie", "player win", or ai win"
+        
+        switch(winner){
+            case "tie" : tie(); break;
+            case "ai" : aiWin(); break;
+            case "player" : playerWin(); break;
+            default : tie();     
+                
+        }
+        
+    } // game over
+    
+// tie 
+    function tie(){
+        updateScore("tie")
+        return gameOverModal("tie");
+    } // tie
+    
+// player win
+    function playerWin(){
+        updateScore("player")
+        return gameOverModal("player");
+    } // player win
+    
+// ai win    
+    function aiWin(){
+        updateScore("ai")
+        return gameOverModal("ai");
+    } // ai win
+     
+    
+    // update score
 
 function udateScoreView(){
     aiScoreView.html(aiScore);
@@ -539,8 +558,8 @@ function udateScoreView(){
 
 function updateScore(winner){
     if(winner == "reset"){
+        console.log("reset scores");
         playerScore = aiScore = drawScore = 0;
-        return updateScoreView();
     } else if(winner == "tie"){
         drawScore++;
     } else if(winner == "ai"){
@@ -553,7 +572,24 @@ function updateScore(winner){
     
 }
     
+// get tile size
+function tileSize(){
+    // get the average width of a tile
+    var width = $("#tile-1").width();
+    $(".tiles").css("height", width);
+}; // get tile size
+
+//auto resize of the tiles
+$(window).resize(function(){
+        if(newGame){
+            tileSize();
+        }
+    });
+    
+    
+    // init the starting modal
     if(newSession){
-        new GameModalBuilder('setup');
-    }   
-}); // doc ready     
+        setupModal();
+    } 
+    
+}); // doc ready
