@@ -8,12 +8,31 @@
     
 }
 
+@media screen and (max-width : 480px){
+   .tileText {
+    font-size: 4em;
+    top: 50%;
+    color: blue;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    position: relative;
+} 
+    
+    #gameView {
+        margin-top: 33%;
+    }
+}
+
+ @media screen and (min-width : 481px){
+
 .tileText {
     font-size: 10em;
     top: 50%;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
     position: relative;
+}
+     
 }
 
 /*
