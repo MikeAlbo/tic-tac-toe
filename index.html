@@ -29,18 +29,30 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Tic Tac Toe</a>
-            </div>
-            <div class="navbar-right">
-                <p class="navbar-text">Your Score: <span id="playerScore"></span></p>
-                <p class="navbar-text">Computer Score: <span id="aiScore"></span></p>
-                <p class="navbar-text">Draws: <span id="drawScore"></span></p>
-            </div>
-        </div>
-    </nav>
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Tic-Tac-Toe</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+         <li><p class="navbar-text">Your Score: <span id="playerScore"></span></p></li>
+         <li><p class="navbar-text">Computer Score: <span id="aiScore"></span></p></li>
+         <li><p class="navbar-text">Draws: <span id="drawScore"></span></p></li>  
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
     
     
 <!--  modal -->
@@ -49,7 +61,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modalX"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title text-center" id="gameModalTitle"></h4>
       </div>
       <div class="modal-body">
@@ -66,8 +78,6 @@
 
     <div class="container col-xs-12 col-md-8 col-md-offset-2 text-center" id="gameView">
     </div>
-    
-    <button class="btn btn-danger" id="resetGameBoardButton">Reset the gameboard</button>
 
 <!--
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -77,6 +87,7 @@
     <script src="bootstrap/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
     
     <!-- game js  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
     <script src="js/animations.js"></script>
 <!--    <script src="js/gameLogic.js"></script>-->
 <!--    <script src="js/demoGameSetup.js"></script>-->

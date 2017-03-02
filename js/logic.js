@@ -12,7 +12,8 @@ $(document).ready(function(){
     playerScore = 0,
     aiScore = 0,
     drawScore = 0,
-    ai;
+    ai,
+    tiles; // for css animations
 
     
     // ======================================================
@@ -125,6 +126,7 @@ $(document).ready(function(){
     this.aiInitPlay = function(x){
         var randomNumber = Math.floor(Math.random()  * 10);
         data[randomNumber] = x;
+        aiMoveAnimation('#tile-' + (randomNumber + 1))
         addPieceToTile(randomNumber + 1, x);
         turn = "player";
         count = 1;
@@ -133,10 +135,31 @@ $(document).ready(function(){
     
         // init the .tiles listener
     this.initTiles = function(){
-        $(".tiles").on('click', function(){
+        
+        tiles = $(".tiles");
+        
+        $(tiles).on('click', function(){
             var id = parseInt(this.id.match(/[1-9]/));
             playerMove(id);
             id = null;
+        });
+    }
+    
+    // init mouse listeners
+    
+    this.initMouseListeners = function(){
+        $(tiles).mousedown(function(){
+            var id = this.id;
+            playerMouseDown('#' + id);
+        });
+        
+        $(tiles).mouseup(function(){
+            var id = this.id;
+            if(data[parseInt(id.match(/[1-9]/) - 1)]){
+                playerBadClick('#' + id);
+            } else {
+                playerMouseUp('#' + id);
+            }
         });
     }
     
@@ -305,7 +328,7 @@ function AiPlayer(data){
         // setup game
         if(type == "setup"){
             gameModalTitle.html("Tic-Tac-Toe");
-            gameModalFooter.html('<button type="button" class="btn btn-default" data-dismiss="modal">Close</button><button type="button" class="btn btn-primary" id="play">Play!</button>');
+            gameModalFooter.html('<button type="button" class="btn btn-default" id="setupCloseButton" data-dismiss="modal">Close</button><button type="button" class="btn btn-primary" id="play">Play!</button>');
             gameModalContent.html('<div class="col-xs-12 text-center"><h2>You are <span id="setupUser"></span><br> <small><a href="#" id="setupSmall"></a></small></h2> </div>');
             
             var setupUser = $("#setupUser"),
@@ -347,6 +370,18 @@ function AiPlayer(data){
                 initGame(player, turn); 
                 gameModal.modal('toggle');
             }); // play
+            
+            // modal close (x)
+        
+        $("#modalX").on('click', function(){
+            loadDefaultContent();
+        });
+            
+            $("#setupCloseButton").on('click', function(){
+            loadDefaultContent();
+        });
+            
+            
         
         
     }  else if(type == "gameOver") {
@@ -389,6 +424,12 @@ function AiPlayer(data){
             gameModal.modal('toggle');
         });
         
+        // modal close (x)
+        
+        $("#modalX").on('click', function(){
+            initGame(newGame.getSeed(), newGame.getTurn());
+        });
+        
         //gameModal.modal('toggle');
     } 
  
@@ -407,6 +448,7 @@ function AiPlayer(data){
             newGame.setOppSeed();
             newGame.setTurn(turn);
             newGame.initTiles();
+            newGame.initMouseListeners();
             ai = new AiPlayer(newGame.getData());
             ai.setSeed(newGame.getSeed());
             
@@ -436,7 +478,7 @@ function AiPlayer(data){
     if(resetConfirm){
         resetGameBoard();
         updateScore("reset");
-        aiGlobal.turn = false;
+        //aiGlobal.turn = false;
         gameModal.modal('toggle');
         setTimeout(function(){
              setupModal();
@@ -499,6 +541,7 @@ function AiPlayer(data){
         var timeOutdelay = Math.floor(Math.random() * 750); 
         
         setTimeout(function(){
+            aiMoveAnimation('#tile-' + (move + 1));
             addPieceToTile(move + 1, aiPiece );
             // ai move animation
         newGame.updateData(move, aiPiece);
@@ -591,5 +634,33 @@ $(window).resize(function(){
     if(newSession){
         setupModal();
     } 
+    
+    
+    //gameView content if the game is not init by the player
+    
+    function loadDefaultContent(){
+        var defaultMessage = '<div class="jumbotron text-center col-xs-12 col-md-10 col-md-offset-1">';
+    defaultMessage += '<h1><small>welcome</small><br>Tic-Tac-Toe </h1>';
+    defaultMessage += '<div class="col-xs-12 col-md-6 col-md-offset-3 defaultButtons">';
+    defaultMessage += '<p>Start a new game or visit the GutHub repo</p>';
+    defaultMessage += '<button type="button" class="btn btn-primary btn-block" id="defaultStartButton"> Start New Game </button>';
+    defaultMessage += '<a href="https://github.com/MikeAlbo/tic-tac-toe" target="_blank" class="btn btn-primary btn-block" id="defaultGithubButton"> Visit Github Repo </a>';
+    defaultMessage += '</div>' // default buttons
+    defaultMessage += '</div>'; // end jumbtron
+        
+         $(gameView).html(defaultMessage);
+        
+        // button listeners
+        
+        $("#defaultStartButton").on("click", function(){
+            setupModal();
+        });
+        
+        
+    } // load default content
+    
+   
+    
+    
     
 }); // doc ready
