@@ -1,125 +1,180 @@
-# Tic Tac Toe
-ReadMe file
+# Tic Tac Toe | README
+
+## live demo
+[Tic-Tac-Toe] (https://mikealbo.github.io/tic-tac-toe/)
 
 ## things to consider
 
-1. The game should be made into a factory function?? i.e. new Game();
-2. whena  new game is created, it should automatically reset the data and the ui
+* multiplayer mode
+* "easy" / "moderate" mode
 
 
-## gameLogic
 
-### global vars
-1. globalPlayer
-    a. stores the player's piece throughout the session
-    b. can be updated game by game by the player
-2. globalTurn
-    a. stores starting turn of the game throughout the session
-    b. can be updated game by game by the player
-3. newGame
-    a. stores the current game being played
-    b. is init empty until the first game is created
-    c. is re initalized for each new game
+## Game Play
+
+* The user can select "x" or "o", choosing wether to play first or second.
+* When the user selects a square, the move is validated and then added to the game board
+* The Ai calls the minMam function, adding a piece to the gameboard
+* to be continued...
+ 
+
+## minMax
+
+The minMax algorithm being used is a compilation of several components obtained from several YouTube  videos. I will try to go back and provide links to the videos.
+
+```javascript
+
+function AiPlayer(data){
+    var data = data, seed, oppSeed;
     
-
-### jQuery selections
-1. gameView == #gameView
-    a. the main view of the game
+    this.setSeed = function(_seed){
+        oppSeed = _seed === "x" ? "o" : "x";
+        seed = _seed;
+    };
     
-### GameBuilder
-    The main constructor for the game
+    this.getSeed = function(){
+        return seed;
+    };
     
-#### Local vars
-1. data
-    a. initally an empty array
-    b. where the game pieces are stored
-2. turn
-    a. stores the current turn
-        i. 'player' or 'ai'
-3. seed
-    a. stores the players current piece
-        i. 'x' or 'o'
-4. oppSeed
-    a. stores the ai piece
-5. count
-    a. init to 0
-    b. tracks play count
+    this.getOppSeed = function(){
+        return oppSeed;
+    }
     
-#### tileModel
-a private function that generates the tile div and assigns the id
+    this.move = function(){
+        return miniMax(2, seed) [1];
+    };
+    
+    function miniMax(depth, player){
+        var nextMoves = getValidMoves(depth, player);
+        
+        //console.log(nextMoves);
+        
+        var best = (player === seed) ? -100 : 100,
+            current,
+            bestIdx = -1;
+        
+        if(nextMoves.length === 0 || depth === 0){
+            best = evaluate();
+        } else {
+            for(var i = nextMoves.length;  i--;){
+                var m = nextMoves[i];
+                data[m] = player;
+                
+                if(player == seed){
+                    current = miniMax(depth -1, oppSeed)[0];
+                    if(current > best){
+                        best = current;
+                        bestIdx = m;
+                    }
+                } else {
+                    current = miniMax(depth -1, seed)[0];
+                    if(current < best){
+                        best = current;
+                        bestIdx = m;
+                    }
+                }
+                data[m] = undefined;
+            }
+        }
+        
+        
+        return [best, bestIdx];
+    }
+    
+    function getValidMoves(depth, seed){
+        var nm = [];
+        if(hasWon(depth, seed) || hasWon(depth, oppSeed)){
+            return nm;
+        }
+        for(var i = data.length; i--;){
+            if(data[i] === undefined){
+                nm.push(i);
+            }
+        }
+        return nm;
+    }
+    
+    function evaluate(){
+        var s = 0;
+        s += evaluateLine(0,1,2);
+        s += evaluateLine(3,4,5);
+        s += evaluateLine(6,7,8);
+        s += evaluateLine(0,3,6);
+        s += evaluateLine(1,4,7);
+        s += evaluateLine(2,5,8);
+        s += evaluateLine(0,4,8);
+        s += evaluateLine(2,4,6);
+        return s;
+    }
+    
+    function evaluateLine(a,b,c){
+        var s = 0;
+        if(data[a] == seed){
+            s = 1;
+        } else if(data[a] == oppSeed){
+            s = -1;
+        }
+        
+        if(data[b] == seed){
+            if(s == 1){
+                s = 10;
+            } else if (s === -1){
+                return 0;
+            } else {
+                s = 1;
+            }
+        } else if (data[b] == oppSeed){
+            if(s == -1){
+                s = -10;
+            } else if (s === 1){
+                return 0;
+            } else {
+                s = -1;
+            }
+        }
+        
+        if(data[c] == seed){
+            if(s > 0){
+                s *= 10;
+            } else if (s < 0) {
+                return 0;
+            } else {
+                s = 1;
+            }
+        } else if (data[c] == oppSeed){
+            if(s < 0){
+                s *= 10;
+            } else if (s > 0) {
+                return 0;
+            } else {
+                s = -1;
+            }
+        }
+        
+        return s;
+    }
 
-#### tileSize
-A public function that captures the width of #tile-1. The function takes that dimension and applies it to the .tiles class, making the tiles square. 
+}
+    
+    // check to see if there's been a winner
+    function hasWon(state, player){
+        if(
+            (state[0] === player && state[1] === player && state[2] === player) ||
+            (state[3] === player && state[4] === player && state[5] === player) ||
+            (state[6] === player && state[7] === player && state[8] === player) ||
+            (state[0] === player && state[3] === player && state[6] === player) ||
+            (state[1] === player && state[4] === player && state[7] === player) ||
+            (state[2] === player && state[5] === player && state[8] === player) ||
+            (state[0] === player && state[4] === player && state[8] === player) ||
+            (state[2] === player && state[6] === player && state[4] === player)
+        ) {
+             return true;
+            } 
+    }
 
-#### generateBoard
-A public function that creates an empty string then += a new tileModel, passing it the index for the tile's id.
+```
 
-#### setSeed
-A public function that takes an optional argument. If argument, set the seed to that argument. Else, set seed to globalPlayer or 'x'.
 
-#### getSeed
-A public function that returns the seed.
 
-#### setOppSeed
-A public function that sets the oppSeed var.
-
-#### getOppSeed
-A public function that returns the oppSeed var.
-
-#### setTurn
-A public function that takes an optional argument. If argument, set the turn var to the argument, else 'player'.
-
-#### changeTurn
-A public function that updates to turn var depending on the current  value. 
-
-#### getTurn
-A public function that returns the turn var.
-
-#### getData
-A public function that returns the data var.
-
-#### clearData
-A pub function that resets the data var back to an empty array.
-
-#### updateData
-A public var that takes 2 arguments, index and value. The function applies the value to the data var at the index provided.
-
-#### updateCount
-A private function that takes the optional argument, reset. If reset, than resets the count to 0. Else, updates the count. If the count reaches 9, calls checkWin on "player", "ai", and "tie".
-
-#### updateGameBoard
-A private function that takes 2 args, tile, piece. Using jQuery, the function applies the piece to the tile via the tile's id. 
-
-#### clearGameboard
-A private function that resets the game board via a for loop, clearing the jQuery .html value.
-
-#### playerMove
-
-#### aiMove
-
-#### aiInitPlay
-
-#### gameOver
-
-#### tie
-
-#### playerWin
-
-#### aiWin
-
-### Modals for game
-
-#### jQuery selectors
-1. gameModal
-2. gameModalTitle
-3. gameModalFooter
-4. gameModalContent
-
-#### GameModalBuilder
-...
-
-##### jQuery Selectors
-
-##### changeUser
 
 

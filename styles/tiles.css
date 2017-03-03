@@ -12,7 +12,6 @@
    .tileText {
     font-size: 4em;
     top: 50%;
-    color: blue;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
     position: relative;

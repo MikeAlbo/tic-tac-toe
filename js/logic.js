@@ -18,7 +18,7 @@ $(document).ready(function(){
     
     // ======================================================
     
-    // game constructor
+     // game constructor
     
     var GameBuilder = function(){ 
     var data = [undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined,undefined],
@@ -164,7 +164,8 @@ $(document).ready(function(){
     }
     
     } // gameBuilder
-// ai constructor ====================================
+    
+    // ai constructor ====================================
 
 //console.log(ai.move());
 function AiPlayer(data){
@@ -315,7 +316,7 @@ function AiPlayer(data){
             } 
     }
     
-// modal constructor ====================================    
+    // modal constructor ====================================    
     // modal vars
     var gameModal = $("#gameModal"), 
     gameModalTitle = $("#gameModalTitle"),
@@ -434,6 +435,10 @@ function AiPlayer(data){
     } 
  
     }; // gameModalBuilder
+
+
+    
+
     
     // ======================================================
     
