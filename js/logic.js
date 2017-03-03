@@ -455,7 +455,7 @@ function AiPlayer(data){
             newGame.initTiles();
             newGame.initMouseListeners();
             ai = new AiPlayer(newGame.getData());
-            ai.setSeed(newGame.getSeed());
+            ai.setSeed(newGame.getSeed() == 'x' ? 'o' : 'x');
             
             if( newGame.getTurn() == "ai"){
                 newGame.aiInitPlay(newGame.getOppSeed());
@@ -528,6 +528,7 @@ function AiPlayer(data){
                 } else {
                     //console.log("player moved");
                     newGame.changeTurn();
+                   //console.log("turn " + newGame.getTurn() + " seed " + newGame.getSeed() + " oppSeed" + newGame.getOppSeed() );
                     aiMove();
                 }
             }
