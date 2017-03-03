@@ -342,7 +342,7 @@ function AiPlayer(data){
             function changeUser(){
                 if(player == 'x') {
                     setupUser.html("'x', and it's your turn.");
-                    setupSmall.html("Rahter go second?");
+                    setupSmall.html("Rather go second?");
                 } else {
                     setupUser.html("'o', and you will go second.");
                     setupSmall.html("Rather go first?");
@@ -387,7 +387,7 @@ function AiPlayer(data){
         
     }  else if(type == "gameOver") {
         gameModalTitle.html("Tic-Tac-Toe");
-        gameModalFooter.html('<button type="button" class="btn btn-danger" id="newSessionButton">Rest Session</button><button type="button" class="btn btn-primary" id="newGameButton">New Game</button>');
+        gameModalFooter.html('<button type="button" class="btn btn-danger" id="newSessionButton">Reset Session</button><button type="button" class="btn btn-primary" id="newGameButton">New Game</button>');
         
         var message;
         console.log("modal winner var: " + winner);
